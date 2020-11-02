@@ -4,8 +4,19 @@ import { Card, CardImg, CardText, CardBody, CardTitle } from "reactstrap";
 class Dishdetail extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+
+    this.state = {
+    };
   }
+  
+  componentDidMount() {
+    console.log("Menu Component componentDidMount invoked");
+  }
+
+  componentDidUpdate() {
+    console.log('Dishdetail Component componentDidUpdate');
+  }
+
   renderDish(dish) {
     if (dish != null)
       return (
@@ -36,7 +47,7 @@ class Dishdetail extends Component {
                     year: "numeric",
                     month: "short",
                     day: "2-digit",
-                  }).format(new Date(comment.date))}
+                  }).format(new Date(Date.parse(comment.date)))}
                 </p>
               </li>
             </ul>
@@ -47,8 +58,12 @@ class Dishdetail extends Component {
     } else return <div></div>;
   }
   render() {
+
+    console.log('Dishdetail Component Render invoked');
+
     if (this.props.dish != null) {
       return (
+        <div className="container">
           <div className="row">
             <div className="col-12 col-md-5 m-1">
               {this.renderDish(this.props.dish)}
@@ -57,6 +72,7 @@ class Dishdetail extends Component {
               <h4>Comments</h4>
               {this.renderComments(this.props.dish.comments)}
             </div>
+        </div>
         </div>
       );
     } else return <div></div>;
