@@ -10,58 +10,70 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 
+// function RenderDish(props){}
 function RenderDish({ dish }) {
-  if (dish != null)
+  if (dish != null) {
     return (
-      <Card>
-        <CardImg top src={dish.image} alt={dish.name} />
-        <CardBody>
-          <CardTitle>{dish.name}</CardTitle>
-          <CardText>{dish.description}</CardText>
-        </CardBody>
-      </Card>
+      <div className="col-12 col-md-5 m-1">
+        <Card>
+          <CardImg width="100%" src={dish.image} alt={dish.name} />
+          <CardBody>
+            <CardTitle> {dish.name} </CardTitle>
+            <CardText> {dish.description} </CardText>
+          </CardBody>
+        </Card>
+      </div>
     );
-  else return <div></div>;
+  } else {
+    return <div></div>;
+  }
 }
 
+// function RenderComments(props){}
 function RenderComments({ comments }) {
   if (comments != null) {
+    const cmnts = comments && comments.map((commnts) => {
       return (
-        <div className="col-12 col-5 m-1">
-          <h4>Comments</h4>
-          <ul className="list-unstyled">
-            {comments.map((comment) => {
-              return (
-                <li key={comment.id}>
-                  <p>{comments.comment}</p>
-                  <p>
-                -- {comments.author},
-                {new Intl.DateTimeFormat("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "2-digit",
-                }).format(new Date(Date.parse(comments.date)))}
-              </p>
-                </li>
-              );
-            })}       
-          </ul>
-        </div>
+        <ul key={commnts.id} className="list-unstyled">
+          <li>
+            <p> {commnts.comment} </p>
+            <p>
+              {" "}
+              -- {commnts.author}, &nbsp;
+              {new Intl.DateTimeFormat("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              }).format(new Date(Date.parse(commnts.date)))}
+            </p>
+          </li>
+        </ul>
       );
-    }
- else return <div></div>;
+    });
+
+    return (
+      <div className="col-12 col-md-5 m-1">
+        <h4> Comments </h4>
+        {cmnts}
+      </div>
+    );
+    // if comments is empty
+  } else {
+    return <div></div>;
+  }
 }
 
-const Dishdetail = (props) => {
+const DishDetail = (props) => {
   if (props.dish != null) {
     return (
       <div className="container">
         <div className="row">
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link to="/menu">Menu</Link>
+              {" "}
+              <Link to="home">Home</Link>{" "}
             </BreadcrumbItem>
-            <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+            <BreadcrumbItem active>Menu</BreadcrumbItem>
           </Breadcrumb>
           <div className="col-12">
             <h3>{props.dish.name}</h3>
@@ -74,6 +86,9 @@ const Dishdetail = (props) => {
         </div>
       </div>
     );
-  } else return <div></div>;
+  } else {
+    return <div></div>;
+  }
 };
-export default Dishdetail;
+
+export default DishDetail;
