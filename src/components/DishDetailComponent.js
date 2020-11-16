@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   Card,
   CardImg,
@@ -7,8 +7,20 @@ import {
   CardTitle,
   Breadcrumb,
   BreadcrumbItem,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Button,
+  Row,
+  Label,
+  Col,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Control, LocalForm, Errors } from "react-redux-form";
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => (val) && (val.length >= len);
 
 // function RenderDish(props){}
 function RenderDish({ dish }) {
@@ -32,29 +44,36 @@ function RenderDish({ dish }) {
 // function RenderComments(props){}
 function RenderComments({ comments }) {
   if (comments != null) {
-    const cmnts = comments && comments.map((commnts) => {
-      return (
-        <ul key={commnts.id} className="list-unstyled">
-          <li>
-            <p> {commnts.comment} </p>
-            <p>
-              {" "}
-              -- {commnts.author}, &nbsp;
-              {new Intl.DateTimeFormat("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "2-digit",
-              }).format(new Date(Date.parse(commnts.date)))}
-            </p>
-          </li>
-        </ul>
-      );
-    });
+    const cmnts =
+      comments &&
+      comments.map((commnts) => {
+        return (
+          <ul key={commnts.id} className="list-unstyled">
+            <li>
+              <p> {commnts.comment} </p>
+              <p>
+                {" "}
+                -- {commnts.author}, &nbsp;
+                {new Intl.DateTimeFormat("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "2-digit"
+                }).format(new Date(Date.parse(commnts.date)))}
+              </p>
+            </li>
+          </ul>
+        );
+      });
 
     return (
       <div className="col-12 col-md-5 m-1">
-        <h4> Comments </h4>
-        {cmnts}
+        <div className="row">
+          <h4> Comments </h4>
+          {cmnts}
+        </div>
+        <div className="row">
+          <CommentForm />
+        </div>
       </div>
     );
     // if comments is empty
@@ -90,5 +109,109 @@ const DishDetail = (props) => {
     return <div></div>;
   }
 };
+
+class CommentForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isModalOpen: false,
+    };
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  toggleModal() {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen,
+    });
+  }
+
+  handleSubmit(values) {
+    console.log("Current State is: " + JSON.stringify(values));
+    alert("Current State is: " + JSON.stringify(values));
+  }
+
+  render() {
+    return (
+      <div>
+        <Button outline onClick={this.toggleModal}>
+          <span className="fa fa-pencil fa-lg"></span>Submit Comment
+        </Button>
+        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+          <ModalBody>
+            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+              <Label htmlFor="rating">Rating</Label>
+              <Row className="form-group">
+                <Col md={12}>
+                  <Control.select
+                    model=".rating"
+                    name="rating"
+                    className="form-control"
+                  >
+                    <options selected>Choose Rating</options>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </Control.select>
+                </Col>
+              </Row>
+              <Label htmlFor="name">Your Name</Label>
+              <Row className="form-group">
+                <Col md={12}>
+                  <Control.text
+                    model=".name"
+                    id="name"
+                    name="name"
+                    placeholder="Enter Your Name"
+                    className="form-control"
+                    validators={{
+                      required,
+                      minLength: minLength(3),
+                      maxLength: maxLength(15),
+                    }}
+                  />
+                  <Errors
+                    className="text-danger"
+                    model=".name"
+                    show="touched"
+                    messages={{
+                      required: "Required",
+                      minLength: "Must be greater than 2 characters",
+                      maxLength: "Must be 15 characters or less",
+                    }}
+                  />
+                </Col>
+              </Row>
+              <Label htmlFor="cmt">Comment</Label>
+              <Row className="form-group">
+                <Col md={12}>
+                  {" "}
+                  {/*form a column for medium and large size*/}
+                  <Control.textarea
+                    model=".cmt"
+                    id="cmt"
+                    name="cmt"
+                    rows="6"
+                    className="form-control"
+                  />
+                </Col>
+              </Row>
+              <Row className="form-group">
+                <Col md={{ size: 10 }}>
+                  <Button type="submit" color="primary">
+                    Submit
+                  </Button>
+                </Col>
+              </Row>
+            </LocalForm>
+          </ModalBody>
+        </Modal>
+      </div>
+    );
+  }
+}
 
 export default DishDetail;

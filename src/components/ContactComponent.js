@@ -106,8 +106,6 @@ class Contact extends Component {
                   First Name
                 </Label>
                 <Col md={10}>
-                  {" "}
-                  {/*form a column for medium and large size*/}
                   <Control.text model=".firstname"
                     id="firstname"
                     name="firstname"
@@ -123,7 +121,7 @@ class Contact extends Component {
                   show="touched"
                   messages={{
                     required: 'Required',
-                    minlength: 'Must be greater than 2 characters',
+                    minLength: 'Must be greater than 2 characters',
                     maxLength: 'Must be 15 characters or less'
                   }} 
                   />
