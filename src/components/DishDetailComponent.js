@@ -45,9 +45,9 @@ function RenderDish({ dish }) {
 function RenderComments({ comments, addComment, dishId }) {
   if (comments != null) {
     const cmnts =
-      comments &&
       comments.map((commnts) => {
         return (
+          <div className="container">
           <ul key={commnts.id} className="list-unstyled">
             <li>
               <p> {commnts.comment} </p>
@@ -62,6 +62,7 @@ function RenderComments({ comments, addComment, dishId }) {
               </p>
             </li>
           </ul>
+          </div>
         );
       });
 
@@ -130,7 +131,7 @@ class CommentForm extends Component {
 
   handleSubmit(values) {
     this.toggleModal();
-    this.props.addComment(this.props.dishId, values.rating, values.name, values.cmt)
+    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
@@ -160,13 +161,13 @@ class CommentForm extends Component {
                   </Control.select>
                 </Col>
               </Row>
-              <Label htmlFor="name">Your Name</Label>
+              <Label htmlFor="author">Your Name</Label>
               <Row className="form-group">
                 <Col md={12}>
                   <Control.text
-                    model=".name"
-                    id="name"
-                    name="name"
+                    model=".author"
+                    id="author"
+                    name="author"
                     placeholder="Enter Your Name"
                     className="form-control"
                     validators={{
@@ -177,7 +178,7 @@ class CommentForm extends Component {
                   />
                   <Errors
                     className="text-danger"
-                    model=".name"
+                    model=".author"
                     show="touched"
                     messages={{
                       required: "Required",
@@ -187,15 +188,15 @@ class CommentForm extends Component {
                   />
                 </Col>
               </Row>
-              <Label htmlFor="cmt">Comment</Label>
+              <Label htmlFor="comment">Comment</Label>
               <Row className="form-group">
                 <Col md={12}>
                   {" "}
                   {/*form a column for medium and large size*/}
                   <Control.textarea
-                    model=".cmt"
-                    id="cmt"
-                    name="cmt"
+                    model=".comment"
+                    id="comment"
+                    name="comment"
                     rows="6"
                     className="form-control"
                   />

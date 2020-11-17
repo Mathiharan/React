@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   addComment: (dishId, rating, author, comment) =>
-    dispatch(addComment((dishId, rating, author, comment))),
+    dispatch(addComment(dishId, rating, author, comment))
 });
 
 class Main extends Component {
@@ -49,8 +49,8 @@ class Main extends Component {
             )[0]
           }
           comments={
-            this.props.comments.filter((comment) => comment.DishId) ===
-            parseInt(match.params.dishId, 10)
+            this.props.comments.filter((comment) => comment.dishId ===
+            parseInt(match.params.dishId, 10))
           }
           addComment={this.props.addComment}
         />
