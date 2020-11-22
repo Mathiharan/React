@@ -17,12 +17,12 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
-import { Loading } from './LoadingComponent';
+import { Loading } from "./LoadingComponent";
 import { baseUrl } from "../shared/baseUrl";
 
 const required = (val) => val && val.length;
-const maxLength = (len) => (val) => !(val) || (val.length <= len);
-const minLength = (len) => (val) => (val) && (val.length >= len);
+const maxLength = (len) => (val) => !val || val.length <= len;
+const minLength = (len) => (val) => val && val.length >= len;
 
 // function RenderDish(props){}
 function RenderDish({ dish }) {
@@ -44,12 +44,11 @@ function RenderDish({ dish }) {
 }
 
 // function RenderComments(props){}
-function RenderComments({ comments, addComment, dishId }) {
+function RenderComments({ comments, postComment, dishId }) {
   if (comments != null) {
-    const cmnts =
-      comments.map((commnts) => {
-        return (
-          <div className="container">
+    const cmnts = comments.map((commnts) => {
+      return (
+        <div className="container">
           <ul key={commnts.id} className="list-unstyled">
             <li>
               <p> {commnts.comment} </p>
@@ -59,14 +58,14 @@ function RenderComments({ comments, addComment, dishId }) {
                 {new Intl.DateTimeFormat("en-US", {
                   year: "numeric",
                   month: "short",
-                  day: "2-digit"
+                  day: "2-digit",
                 }).format(new Date(Date.parse(commnts.date)))}
               </p>
             </li>
           </ul>
-          </div>
-        );
-      });
+        </div>
+      );
+    });
 
     return (
       <div className="col-12 col-md-5 m-1">
@@ -75,7 +74,7 @@ function RenderComments({ comments, addComment, dishId }) {
           {cmnts}
         </div>
         <div className="row">
-          <CommentForm dishId={dishId} addComment={addComment} />
+          <CommentForm dishId={dishId} postComment={postComment} />
         </div>
       </div>
     );
@@ -87,24 +86,22 @@ function RenderComments({ comments, addComment, dishId }) {
 
 const DishDetail = (props) => {
   if (props.isLoading) {
-    return(
+    return (
       <div className="container">
         <div className="row">
           <Loading />
         </div>
       </div>
     );
-  }
-  else if (props.errMess) {
-    return(
+  } else if (props.errMess) {
+    return (
       <div className="container">
         <div className="row">
           <h4>{props.errMess}</h4>
         </div>
       </div>
     );
-  }
-  else if (props.dish != null) {
+  } else if (props.dish != null) {
     return (
       <div className="container">
         <div className="row">
@@ -122,9 +119,11 @@ const DishDetail = (props) => {
         </div>
         <div className="row">
           <RenderDish dish={props.dish} />
-          <RenderComments comments={props.comments}
-           addComment={props.addComment}
-           dishId={props.dish.id} />
+          <RenderComments
+            comments={props.comments}
+            postComment={props.postComment}
+            dishId={props.dish.id}
+          />
         </div>
       </div>
     );
@@ -151,7 +150,12 @@ class CommentForm extends Component {
 
   handleSubmit(values) {
     this.toggleModal();
-    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    this.props.postComment(
+      this.props.dishId,
+      values.rating,
+      values.author,
+      values.comment
+    );
   }
 
   render() {
