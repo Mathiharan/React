@@ -59,7 +59,7 @@ function RenderComments({ comments, postComment, dishId }) {
         <div className="container">
           <ul key={commnts.id} className="list-unstyled">
             <Stagger in>
-                <li>
+              <li>
                 <Fade in>
                   <p> {commnts.comment} </p>
                   <p>
@@ -71,8 +71,8 @@ function RenderComments({ comments, postComment, dishId }) {
                       day: "2-digit",
                     }).format(new Date(Date.parse(commnts.date)))}
                   </p>
-                  </Fade>
-                </li>
+                </Fade>
+              </li>
             </Stagger>
           </ul>
         </div>
